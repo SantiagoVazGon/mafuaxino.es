@@ -1,238 +1,247 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>León Uniformes - Elegancia y Seguridad</title>
+    <title>mafuaxino | Custom Leather Goods</title>
+    
+    <!-- Google Fonts: Playfair Display (Serif) & Inter (Sans-serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- React & ReactDOM -->
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-    
-    <!-- Babel for JSX -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- Tailwind Configuration for Dark Moody Theme -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        base: '#080808',       // Very dark background
+                        surface: '#121212',    // Slightly lighter for cards/sections
+                        charcoal: '#1c1c1c',   // Borders and subtle highlights
+                        leather: '#4a2f1d',    // Deep brown accent
+                        leatherLight: '#734b31', // Lighter brown for hovers
+                        textMain: '#e8e6e3',   // Off-white text
+                        textMuted: '#9e9a96',  // Muted grey text
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
     
     <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #fcfbf9; /* Cream/Off-white */
-            color: #0f172a; /* Navy/Slate */
+        html { scroll-behavior: smooth; }
+        body { background-color: #080808; color: #e8e6e3; }
+        
+        /* Subtle image zoom on hover for gallery */
+        .gallery-item:hover .gallery-img {
+            transform: scale(1.05);
         }
-        h1, h2, h3, h4, .serif { 
-            font-family: 'Playfair Display', serif; 
+        .gallery-img {
+            transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-        .fade-in { 
-            animation: fadeIn 0.6s ease-out forwards; 
+
+        /* Custom Form Input Styling */
+        .input-field {
+            background-color: transparent;
+            border: none;
+            border-bottom: 1px solid #1c1c1c;
+            color: #e8e6e3;
+            transition: border-color 0.3s ease;
         }
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(10px); } 
-            to { opacity: 1; transform: translateY(0); } 
+        .input-field:focus {
+            outline: none;
+            border-bottom: 1px solid #734b31;
         }
-        .nav-link {
-            position: relative;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-size: 0.875rem;
-        }
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 1px;
-            bottom: -2px;
-            left: 0;
-            background-color: currentColor;
-            transition: width 0.3s ease;
-        }
-        .nav-link:hover::after {
-            width: 100%;
+        .input-field::placeholder {
+            color: #555;
         }
     </style>
 </head>
-<body>
-    <div id="root"></div>
+<body class="font-sans antialiased min-h-screen flex flex-col selection:bg-leatherLight selection:text-white">
 
-    <script type="text/babel">
-        const { useState } = React;
+    <!-- Navigation -->
+    <nav class="w-full py-6 px-6 md:px-12 flex justify-between items-center fixed top-0 z-50 bg-base/90 backdrop-blur-md border-b border-charcoal">
+        <a href="#" class="font-serif text-2xl font-semibold tracking-wider text-textMain">mafuaxino</a>
+        
+        <div class="hidden md:flex gap-8 text-xs uppercase tracking-[0.15em] font-medium text-textMuted">
+            <a href="#portfolio" class="hover:text-leatherLight transition-colors duration-300">Portfolio</a>
+            <a href="#custom-orders" class="hover:text-leatherLight transition-colors duration-300">Custom Orders</a>
+        </div>
+    </nav>
 
-        const products = [
-            { id: 1, name: "Línea Corporativa Ejecutiva", category: "Oficina", img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800" },
-            { id: 2, name: "Filipinas Médicas Premium", category: "Salud", img: "https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&q=80&w=800" },
-            { id: 3, name: "Mezclilla Industrial de Alta Resistencia", category: "Industria", img: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&q=80&w=800" },
-            { id: 4, name: "Uniformes Gastronómicos", category: "Hostelería", img: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&q=80&w=800" }
-        ];
-
-        const Navbar = ({ setPage }) => (
-            <nav className="flex items-center justify-between px-8 py-6 bg-[#fcfbf9] border-b border-gray-200 sticky top-0 z-50">
-                <div className="flex space-x-8">
-                    <button onClick={() => setPage('home')} className="nav-link text-slate-800">Inicio</button>
-                    <button onClick={() => setPage('shop')} className="nav-link text-slate-800">Colecciones</button>
-                </div>
-                <div className="text-center cursor-pointer" onClick={() => setPage('home')}>
-                    <h1 className="text-3xl serif tracking-widest text-slate-900 uppercase">León</h1>
-                    <p className="text-[0.6rem] tracking-[0.3em] text-slate-500 uppercase mt-1">Uniformes & Equipamiento</p>
-                </div>
-                <div className="flex space-x-8">
-                    <button onClick={() => setPage('about')} className="nav-link text-slate-800">Nosotros</button>
-                    <button onClick={() => setPage('contact')} className="nav-link text-slate-800">Contacto</button>
-                </div>
-            </nav>
-        );
-
-        const Footer = () => (
-            <footer className="bg-slate-900 text-stone-300 py-16 px-8 mt-20">
-                <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
-                    <div>
-                        <h2 className="text-2xl serif text-white tracking-widest uppercase mb-4">León</h2>
-                        <p className="text-sm font-light leading-relaxed">Fabricantes directos de ropa de trabajo, calzado industrial y equipo de seguridad con la más alta calidad.</p>
-                    </div>
-                    <div className="flex flex-col space-y-3 text-sm font-light">
-                        <span className="uppercase tracking-widest text-white mb-2 text-xs">Atención al Cliente</span>
-                        <a href="#" className="hover:text-white transition-colors">Guía de Tallas</a>
-                        <a href="#" className="hover:text-white transition-colors">Envíos y Devoluciones</a>
-                        <a href="#" className="hover:text-white transition-colors">Pedidos Mayoristas</a>
-                    </div>
-                    <div className="flex flex-col space-y-3 text-sm font-light">
-                        <span className="uppercase tracking-widest text-white mb-2 text-xs">Contacto</span>
-                        <p>ventas@leonuniformes.com</p>
-                        <p>Lun - Vie, 9:00 - 18:00</p>
-                    </div>
-                </div>
-                <div className="max-w-6xl mx-auto mt-16 pt-8 border-t border-slate-700 text-center text-xs font-light tracking-wide">
-                    &copy; 2026 León Uniformes. Todos los derechos reservados.
-                </div>
-            </footer>
-        );
-
-        const Home = ({ setPage }) => (
-            <div className="fade-in">
-                {/* Hero Section */}
-                <div className="relative h-[80vh] w-full overflow-hidden bg-slate-900 flex items-center justify-center">
-                    <div className="absolute inset-0 z-0">
-                        <img 
-                            src="https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&q=80&w=2000" 
-                            className="w-full h-full object-cover opacity-60"
-                            alt="Profesionales médicos"
-                        />
-                    </div>
-                    <div className="relative z-10 text-center text-white px-4">
-                        <h2 className="serif text-5xl md:text-7xl font-light mb-6 tracking-wide drop-shadow-lg">El Estándar de la Excelencia</h2>
-                        <p className="text-lg md:text-xl font-light mb-10 tracking-widest uppercase drop-shadow-md">Tradición, Resistencia y Diseño</p>
-                        <button onClick={() => setPage('shop')} className="bg-white text-slate-900 px-10 py-4 uppercase tracking-widest text-sm hover:bg-slate-200 transition-colors duration-300">
-                            Explorar Colección
-                        </button>
-                    </div>
-                </div>
-
-                {/* Categories */}
-                <div className="max-w-7xl mx-auto py-24 px-8">
-                    <div className="text-center mb-16">
-                        <h3 className="serif text-3xl text-slate-900 mb-3">Nuestras Líneas</h3>
-                        <div className="w-16 h-px bg-slate-900 mx-auto"></div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {products.slice(0, 2).map((prod) => (
-                            <div key={prod.id} className="group relative h-96 overflow-hidden cursor-pointer" onClick={() => setPage('shop')}>
-                                <img src={prod.img} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt={prod.name} />
-                                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-500"></div>
-                                <div className="absolute bottom-8 left-8 text-white">
-                                    <p className="text-xs uppercase tracking-widest mb-1">{prod.category}</p>
-                                    <h4 className="serif text-2xl">{prod.name}</h4>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+    <!-- Hero Section -->
+    <header class="relative w-full min-h-screen flex flex-col items-center justify-center px-6 pt-24 pb-12 text-center bg-[url('https://placehold.co/1920x1080/080808/1c1c1c?text=Dark+Leather+Texture')] bg-cover bg-center bg-no-repeat bg-blend-overlay">
+        <!-- Dark overlay gradient to ensure text readability -->
+        <div class="absolute inset-0 bg-gradient-to-b from-base/80 via-base/60 to-base z-0"></div>
+        
+        <div class="relative z-10 max-w-3xl flex flex-col items-center mt-12">
+            
+            <!-- Prominent Boxer Dog Logo Placeholder -->
+            <div class="mb-10 w-48 h-48 md:w-64 md:h-64 rounded-full border border-charcoal flex items-center justify-center p-2 bg-surface/50 shadow-2xl">
+                <!-- Replace src with your actual simple, elegant Boxer logo -->
+                <img src="https://placehold.co/300x300/121212/4a2f1d?text=Boxer+Logo" alt="mafuaxino Boxer Logo" class="w-full h-full object-contain rounded-full opacity-80 filter contrast-125">
             </div>
-        );
 
-        const Shop = () => (
-            <div className="fade-in max-w-7xl mx-auto py-16 px-8">
-                <h2 className="serif text-4xl text-center mb-4">Colección Completa</h2>
-                <p className="text-center text-slate-500 mb-12 font-light">Equipamiento diseñado para el rendimiento diario.</p>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {products.map((prod) => (
-                        <div key={prod.id} className="group cursor-pointer">
-                            <div className="overflow-hidden mb-4 h-80 bg-gray-100">
-                                <img src={prod.img} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt={prod.name} />
-                            </div>
-                            <div className="text-center">
-                                <h4 className="serif text-lg text-slate-900">{prod.name}</h4>
-                                <p className="text-xs uppercase tracking-widest text-slate-500 mt-2">{prod.category}</p>
-                            </div>
-                        </div>
-                    ))}
+            <p class="font-sans uppercase tracking-[0.2em] text-textMuted text-xs font-medium mb-4">Artisan Leathercraft</p>
+            <h1 class="font-serif text-5xl md:text-7xl font-bold mb-6 text-textMain leading-tight">
+                Crafted in <br/><span class="italic font-light text-leatherLight">Shadow & Grain</span>
+            </h1>
+            <p class="font-sans text-textMuted font-light max-w-lg mb-12 text-sm leading-relaxed">
+                Bespoke wallets and cardholders, meticulously cut and hand-stitched. Designed to age with character, crafted to endure.
+            </p>
+            
+            <a href="#portfolio" class="px-8 py-4 border border-charcoal hover:border-leatherLight text-textMain uppercase tracking-[0.15em] text-xs transition-all duration-300 bg-surface/50 hover:bg-leather/10 backdrop-blur-sm">
+                View the Portfolio
+            </a>
+        </div>
+    </header>
+
+    <!-- Portfolio Gallery Section -->
+    <section id="portfolio" class="w-full py-24 px-6 md:px-12 bg-base border-t border-charcoal">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                <div>
+                    <h2 class="font-serif text-3xl md:text-5xl font-bold mb-2">The Works</h2>
+                    <p class="font-sans text-textMuted text-sm font-light">A selection of handcrafted pieces.</p>
                 </div>
+                <div class="w-24 h-px bg-leatherLight hidden md:block mb-3"></div>
             </div>
-        );
 
-        const About = () => (
-            <div className="fade-in max-w-4xl mx-auto py-24 px-8 text-center">
-                <h2 className="serif text-4xl mb-8">Nuestra Historia</h2>
-                <div className="w-16 h-px bg-slate-900 mx-auto mb-10"></div>
-                <p className="text-lg leading-relaxed font-light text-slate-700 mb-6">
-                    Con más de dos décadas de experiencia ininterrumpida en la industria, León Uniformes nació de la dedicación al trabajo bien hecho. Entendemos que un uniforme no es solo una prenda, sino la identidad y la armadura diaria de los profesionales.
-                </p>
-                <p className="text-lg leading-relaxed font-light text-slate-700">
-                    Nuestra trayectoria fabricando ropa de trabajo, zapatos de seguridad y líneas ejecutivas nos ha permitido perfeccionar cada costura, asegurando que cada prenda ofrezca la resistencia que exige el trabajo pesado y la elegancia que requiere la atención corporativa.
-                </p>
-            </div>
-        );
-
-        const Contact = () => (
-            <div className="fade-in max-w-3xl mx-auto py-24 px-8">
-                <h2 className="serif text-4xl text-center mb-12">Póngase en Contacto</h2>
-                <form className="space-y-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Gallery Grid (Easily expandable for bags later) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Item 1 -->
+                <div class="gallery-item group cursor-pointer">
+                    <div class="w-full aspect-square overflow-hidden bg-surface mb-4 border border-charcoal relative">
+                        <img src="https://placehold.co/800x800/121212/e8e6e3?text=Bifold+Wallet+Dark" alt="Leather Bifold Wallet" class="gallery-img w-full h-full object-cover opacity-80 group-hover:opacity-100">
+                    </div>
+                    <div class="flex justify-between items-start">
                         <div>
-                            <label className="block text-xs uppercase tracking-widest text-slate-500 mb-2">Nombre Completo</label>
-                            <input type="text" className="w-full bg-transparent border-b border-slate-300 py-2 focus:outline-none focus:border-slate-900 transition-colors" />
+                            <h3 class="font-serif text-xl font-medium mb-1">Classic Bifold</h3>
+                            <p class="font-sans text-xs text-textMuted uppercase tracking-wider">Deep Espresso</p>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="gallery-item group cursor-pointer">
+                    <div class="w-full aspect-square overflow-hidden bg-surface mb-4 border border-charcoal relative">
+                        <img src="https://placehold.co/800x800/121212/e8e6e3?text=Minimalist+Cardholder" alt="Leather Cardholder" class="gallery-img w-full h-full object-cover opacity-80 group-hover:opacity-100">
+                    </div>
+                    <div class="flex justify-between items-start">
                         <div>
-                            <label className="block text-xs uppercase tracking-widest text-slate-500 mb-2">Empresa</label>
-                            <input type="text" className="w-full bg-transparent border-b border-slate-300 py-2 focus:outline-none focus:border-slate-900 transition-colors" />
+                            <h3 class="font-serif text-xl font-medium mb-1">Minimalist Cardholder</h3>
+                            <p class="font-sans text-xs text-textMuted uppercase tracking-wider">Charcoal Black</p>
                         </div>
                     </div>
-                    <div>
-                        <label className="block text-xs uppercase tracking-widest text-slate-500 mb-2">Correo Electrónico</label>
-                        <input type="email" className="w-full bg-transparent border-b border-slate-300 py-2 focus:outline-none focus:border-slate-900 transition-colors" />
+                </div>
+
+                <!-- Item 3 -->
+                <div class="gallery-item group cursor-pointer">
+                    <div class="w-full aspect-square overflow-hidden bg-surface mb-4 border border-charcoal relative">
+                        <img src="https://placehold.co/800x800/121212/e8e6e3?text=Front+Pocket+Wallet" alt="Front Pocket Wallet" class="gallery-img w-full h-full object-cover opacity-80 group-hover:opacity-100">
                     </div>
-                    <div>
-                        <label className="block text-xs uppercase tracking-widest text-slate-500 mb-2">Mensaje / Requerimientos</label>
-                        <textarea rows="4" className="w-full bg-transparent border-b border-slate-300 py-2 focus:outline-none focus:border-slate-900 transition-colors"></textarea>
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-serif text-xl font-medium mb-1">Front Pocket Sleeve</h3>
+                            <p class="font-sans text-xs text-textMuted uppercase tracking-wider">Burnished Tan</p>
+                        </div>
                     </div>
-                    <button type="button" className="w-full bg-slate-900 text-white py-4 uppercase tracking-widest text-sm hover:bg-slate-800 transition-colors">
-                        Enviar Solicitud
+                </div>
+                
+                <!-- Future Item Placeholder (e.g. for Bags) -->
+                <div class="gallery-item group cursor-pointer md:col-span-2 lg:col-span-1 hidden lg:block">
+                     <div class="w-full aspect-square overflow-hidden bg-surface mb-4 border border-charcoal flex items-center justify-center relative">
+                        <span class="font-serif italic text-textMuted/50 text-xl absolute">More to come...</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Custom Orders / Contact Section -->
+    <section id="custom-orders" class="w-full py-24 px-6 md:px-12 bg-surface border-t border-charcoal">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row gap-16">
+            
+            <!-- Left Info Side -->
+            <div class="w-full md:w-1/2">
+                <h2 class="font-serif text-3xl md:text-4xl font-bold mb-6">Commission a Piece</h2>
+                <p class="font-sans text-textMuted text-sm font-light leading-loose mb-8">
+                    Every mafuaxino piece is made to order. Whether you desire a specific thread color, a unique leather dye, or a custom engraving alongside the Boxer emblem, fill out the form to begin the conversation.
+                </p>
+                <div class="flex flex-col gap-4">
+                    <div class="flex items-center gap-4 text-sm text-textMuted">
+                        <span class="w-8 h-px bg-charcoal"></span> Hand-cut & Stitched
+                    </div>
+                    <div class="flex items-center gap-4 text-sm text-textMuted">
+                        <span class="w-8 h-px bg-charcoal"></span> Premium Full-Grain Leather
+                    </div>
+                    <div class="flex items-center gap-4 text-sm text-textMuted">
+                        <span class="w-8 h-px bg-charcoal"></span> Custom Engraving Available
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Form Side -->
+            <div class="w-full md:w-1/2 bg-base p-8 md:p-10 border border-charcoal shadow-2xl">
+                <form action="#" method="POST" class="flex flex-col gap-8">
+                    
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="flex-col flex w-full">
+                            <label for="name" class="font-sans text-xs uppercase tracking-widest text-textMuted mb-2">Your Name</label>
+                            <input type="text" id="name" class="input-field w-full py-2 font-serif text-lg" required>
+                        </div>
+                        <div class="flex-col flex w-full">
+                            <label for="email" class="font-sans text-xs uppercase tracking-widest text-textMuted mb-2">Email Address</label>
+                            <input type="email" id="email" class="input-field w-full py-2 font-serif text-lg" required>
+                        </div>
+                    </div>
+
+                    <div class="flex-col flex w-full">
+                        <label for="interest" class="font-sans text-xs uppercase tracking-widest text-textMuted mb-2">Item of Interest</label>
+                        <select id="interest" class="input-field w-full py-2 font-serif text-lg bg-base text-textMain appearance-none cursor-pointer">
+                            <option value="wallet">Bifold Wallet</option>
+                            <option value="cardholder">Cardholder</option>
+                            <option value="other">Other / Custom Request</option>
+                        </select>
+                    </div>
+
+                    <div class="flex-col flex w-full">
+                        <label for="message" class="font-sans text-xs uppercase tracking-widest text-textMuted mb-2">Your Vision</label>
+                        <textarea id="message" rows="4" class="input-field w-full py-2 font-sans text-sm font-light resize-none" placeholder="Tell me about the colors, style, or specific customizations you are looking for..."></textarea>
+                    </div>
+
+                    <button type="submit" class="mt-4 w-full py-4 border border-leatherLight bg-leather/10 text-leatherLight uppercase font-sans tracking-[0.2em] text-xs hover:bg-leatherLight hover:text-base transition-all duration-300">
+                        Submit Request
                     </button>
                 </form>
             </div>
-        );
 
-        const App = () => {
-            const [page, setPage] = useState('home');
+        </div>
+    </section>
 
-            return (
-                <div className="min-h-screen flex flex-col">
-                    <Navbar setPage={setPage} />
-                    <main className="flex-grow">
-                        {page === 'home' && <Home setPage={setPage} />}
-                        {page === 'shop' && <Shop />}
-                        {page === 'about' && <About />}
-                        {page === 'contact' && <Contact />}
-                    </main>
-                    <Footer />
-                </div>
-            );
-        };
+    <!-- Footer -->
+    <footer class="w-full py-12 px-6 md:px-12 bg-base text-center border-t border-charcoal">
+        <div class="flex flex-col items-center justify-center">
+            <h2 class="font-serif text-2xl text-textMuted mb-6">mafuaxino</h2>
+            <div class="flex gap-6 mb-8 text-xs font-sans uppercase tracking-[0.15em] text-textMuted">
+                <a href="#" class="hover:text-textMain transition-colors">Instagram</a>
+                <a href="#" class="hover:text-textMain transition-colors">Email</a>
+            </div>
+            <p class="font-sans text-[10px] text-textMuted/40 uppercase tracking-widest">
+                &copy; 2026 mafuaxino. All Rights Reserved.
+            </p>
+        </div>
+    </footer>
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
 </body>
 </html>
